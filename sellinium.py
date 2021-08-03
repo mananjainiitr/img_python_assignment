@@ -165,13 +165,13 @@ def scrap(username):
     newlike = newlike.replace(",","  ")
     newlike = newlike.replace("{","")
     newlike = newlike.replace("}","")
-    queryy = "INSERT INTO scrap (userid,name,work,city,favouraites) VALUES (\'"+username+"\',\'"+name+"\',\'"+newwork+"\',\'"+city+"\',\'"+newlike+"\');"
-    connn = mysql.connector.connect(user='manan', password='#Manan#2020#', host='localhost',database='user',auth_plugin = "mysql_native_password")
-    cursorr = connn.cursor(buffered = True)
-    mycursorr = connn.cursor()
-    mycursorr.execute(queryy)
-    connn.commit()
-    print(queryy)
+    query = "INSERT INTO scrap (userid,name,work,city,favouraites) VALUES (\'"+username+"\',\'"+name+"\',\'"+newwork+"\',\'"+city+"\',\'"+newlike+"\');"
+    # connn = mysql.connector.connect(user='manan', password='#Manan#2020#', host='localhost',database='user',auth_plugin = "mysql_native_password")
+    # cursor = connn.cursor(buffered = True)
+    mycursor = conn.cursor()
+    mycursor.execute(query)
+    conn.commit()
+    print(query)
     print("Finished")
     
         
