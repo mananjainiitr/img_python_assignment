@@ -39,12 +39,12 @@ def check(username):
         objcity = result[0][3]
         objwork = result[0][2]
         objfav = result[0][4]
-        obj1 = person(objname)
+        obj1 = Person(objname)
         obj1.show(objname,objcity,objwork,objfav)
 
     else:
         scrap(username)
-class person:
+class Person:
     name = ""
     work =[]
     city = ""
@@ -154,7 +154,7 @@ def scrap(username):
 
     
     driver.quit()
-    obj1 = person(name)
+    obj1 = Person(name)
     obj1.show(name,city,work,like)
     mycursor = conn.cursor()
     workstr = str(work)
