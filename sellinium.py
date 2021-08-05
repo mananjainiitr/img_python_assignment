@@ -1,3 +1,5 @@
+from logging import exception, raiseExceptions
+import unittest
 from typing import Text
 import mysql.connector
 import requests
@@ -5,6 +7,7 @@ from bs4 import BeautifulSoup
 from selenium import webdriver
 from time import sleep
 from selenium.webdriver.common.by import By
+from urllib3.packages.six import raise_from
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.options import Options 
 
@@ -22,9 +25,11 @@ def checkusername(username):
         
         check(username)
         return result[0]
+        
 
     else:
-        return "Error data not found"
+        raise Exception("Error data not found")
+        
 def decoder(func,username):
     return func(username)
 def check(username):
@@ -67,13 +72,24 @@ class Person:
         else :
             if self.city == name:
                 self.city = "Roorkee"
-            print("my name is "+self.name)
-            print("my work is ")
-            print(self.work)
-            print("my city is ")
-            print(self.city)
-            print("favouraites are ")
-            print(self.favouraites)
+            if(self.name):
+                print("my name is "+self.name, end =" ")
+                
+            else:
+                raise exception("name not found")
+            if(self.work):
+                print("my work is ", end =" ")
+                print(self.work, end =" ")
+                
+            else:
+                raise exception("work not found")
+
+            if(self.city):
+                print("my city is "+self.city)
+                
+            else:
+                raise exception("city not found")
+            # return (self.name +','+self.city+','+self.work)
 work = []
 name = ""
 like = {}
@@ -107,8 +123,10 @@ def scrap(username):
     con_box = driver.find_element_by_class_name('_2pii')
     print(login_box)
     con_box.click()
-    
-    driver.get("https://m.facebook.com/"+username+"/about/")
+    try:
+        driver.get("https://m.facebook.com/"+username+"/about/")
+    except:
+        raise exception("Login failed")
 
     sleep(10)
     name = driver.find_element(By.XPATH,'/html/body/div[1]/div[1]/div[2]/div/div[3]/a').text
@@ -171,11 +189,22 @@ def scrap(username):
     mycursor = conn.cursor()
     mycursor.execute(query)
     conn.commit()
-    print(query)
-    print("Finished")
+    # print(query)
+    # print("Finished")
     
         
 
     
+# print(decoder(checkusername,"ritvik.jain.52206"))
 
-print(decoder(checkusername,"ritvik.jain.52206"))
+class Test(unittest.TestCase):
+    def test_valid2(self):
+        with self.assertRaises(Exception):
+            decoder(checkusername,"ritvik.jain.5220")
+    def test_valid3(self):
+        with self.assertRaises(Exception):
+            decoder(checkusername,"ritvik.jain.52206")
+
+
+if __name__ == "__main__":
+    unittest.main()
