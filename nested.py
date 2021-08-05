@@ -1,16 +1,26 @@
+from logging import exception
 import unittest
 class matrices:
+    exception =""
     mat = []
     a = []
     det =[]
     def __init__(self,x):
         i = 1
         f = 0
-        while(i < len(x) and f == 0):
-            if(len(x[i])==len(x[i-1])):
-                i = i + 1
-            else:
-                f =1
+        if type(x)==list:
+            if len(x)>1:
+                while(i < len(x) and f == 0):
+                    if(type(x[0])==int):
+                        f=0
+                        break
+                    else:
+                        if(len(x[i])==len(x[i-1])):
+                            i = i + 1
+                        else:
+                            f =1
+        else:
+            f = 1
         if(f == 0):
             self.mat = x
             print (self.mat)
@@ -22,7 +32,7 @@ class matrices:
                 print(i)
                 return self.mat
         else:
-            return(False)
+            return("invalid matrix")
     # def __str__(self):
     #     string = ','.join([str(elem) for elem in self.mat])
     #     return string
@@ -35,8 +45,8 @@ class matrices:
                     a.mat[i][j] = self.mat[i][j]+(other.mat[i][j]) 
             return a
          else:
-             matr = matrices([])
-             return matr
+             
+             raise Exception("Matrices order is different, cannot add")
     def __sub__(self,other):
          if len(self.mat )== len(other.mat)and len(self.mat[0])==len(other.mat[0]):
             a = matrices([])
@@ -46,8 +56,7 @@ class matrices:
                     a.mat[i][j] = self.mat[i][j]-(other.mat[i][j]) 
             return a
          else:
-              matr = matrices([])
-              return matr
+              raise Exception("Matrices order is different, cannot add")
     def __mul__(self,other):
          if len(self.mat[0]) == len(other.mat):
             a = matrices([])
@@ -60,8 +69,7 @@ class matrices:
                     a.mat[i][j] = sum
             return a
          else:
-             matr = matrices([])
-             return matr
+             raise Exception("Matrices order is different, cannot multiply")
     def det(self,matrix):
         if len(self.mat) == len(self.mat[0]):
             sum = 0
@@ -84,8 +92,7 @@ class matrices:
                     sum = sum + pow(-1,j)*matrix[0][j]*obj.det(m)
             return sum
         else:
-            return False
-
+            raise Exception("Matrix is not square")
              
                         
                 # sum = sum + ((-1).pow(j+1))*det()
@@ -98,7 +105,7 @@ class matrices:
                 obj1 = obj1 * self
             return obj1
          else:
-            return False
+            raise Exception("Matrix is not square")
 
         
 
@@ -121,6 +128,23 @@ class Test(unittest.TestCase):
         matrixDiff = self.matrix1 - self.matrix2
         output = matrices([[0, -3, -3], [-1, -10, 1], [2, -2, 4]])
         self.assertEqual(matrixDiff.display(), output.display())
+    def test_1(self):
+        mat1 =  matrices([[0, -3, -3], [-1, -10, 1], [2, -2, 4]])
+        mat2 =  matrices([[0, -3, -3], [-1, -10, 1]])
+        with self.assertRaises(Exception):
+            mat1+mat2
+    def test_2(self):
+        mat1 =  matrices([[0, -3, -3], [-1, -10, 1], [2, -2, 4]])
+        mat2 =  matrices([[0, -3, -3], [-1, -10, 1]])
+        with self.assertRaises(Exception):
+            mat1-mat2
+    def test_3(self):
+        mat1 =  matrices([[0, -3, -3], [-1, -10, 1], [2, -2, 4]])
+        mat2 =  matrices([[0, -3, -3], [-1, -10, 1]])
+        with self.assertRaises(Exception):
+            mat1*mat2
+
+         
     def test_multiply(self):
         matrixMul = self.matrix1 * self.matrix2
         output = matrices([[10, 54, 25], [8, 48, 29], [33, 173, 77]])
@@ -139,27 +163,9 @@ class Test(unittest.TestCase):
         output = [[1,2,3],[3,4,5],[2,3,1]]
         self.assertEqual(matrix.display(),output)
     def test_valid2(self):
-        matrix = matrices([[1,2],[3,4,5],[2,3,1]])
-        output = False
+        matrix = matrices([1])
+        output = [1]
         self.assertEqual(matrix.display(),output)
-    def test_add2(self):
-        mat1 = matrices([[1, 2, 3], [2, 1, 3], [3, 7, 9]])
-        mat2 = matrices([[1, 5, 6], [3, 11, 2]])
-        mat3 = mat1+mat2
-        output = False
-        self.assertEqual(mat3.display(),output)
-    def test_sub2(self):
-        mat1 = matrices([[1, 2, 3], [2, 1, 3], [3, 7, 9]])
-        mat2 = matrices([[1, 5, 6], [3, 11, 2]])
-        mat3 = mat1-mat2
-        output = False
-        self.assertEqual(mat3.display(),output)
-    def test_sub2(self):
-        mat1 = matrices([[1, 2, 3], [2, 1, 3], [3, 7, 9]])
-        mat2 = matrices([[1, 5, 6], [3, 11, 2]])
-        mat3 = mat1*mat2
-        output = False
-        self.assertEqual(mat3.display(),output)
     
 
     
